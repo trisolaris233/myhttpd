@@ -49,14 +49,6 @@ void Responder(tri::http::HttpdBase* phttpd, const tri::http::Request& request) 
 }
 
 int main(int argc, char** argv) {
-    // tri::TcpSocket* psocket = new tri::TcpSocket();
-    // std::stringstream ss(argv[1]);
-    // int port;
-    // ss >> port;
-    // psocket->Create(port);
-    // psocket->Listen(httpraseplus2);
-    // return 0;
-
     std::stringstream ss(argv[1]);
     int port;
     ss >> port;

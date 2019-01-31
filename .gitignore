@@ -1,3 +1,7 @@
 *.swp
 src/comp.sh
 tests/
+*.out
+.vscode
+src/.vscode
+
