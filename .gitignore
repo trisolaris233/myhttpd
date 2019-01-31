@@ -1,2 +1,3 @@
-src/*.swp
+*.swp
 src/comp.sh
+tests/

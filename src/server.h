@@ -2,39 +2,45 @@
 #define SERVER_H
 
 #include "socket.h"
-#include "request.h"
-#include "response.h"
 #include <memory>
 #include <functional>
 
 namespace tri {
 
 namespace http {
-class httpd_base {
+
+
+class Response;
+class Request;
+
+class HttpdBase {
 public:
-    httpd_base();
-    virtual ~httpd_base();
+
+    virtual ~HttpdBase() = 0;
+
+    virtual void Start() {}
+    virtual void Respond(const Response& response) {}
 
 
-protected:
-    void Start();
-    void Respond(const Response& response); 
 };
 
 
 
-class httpd_impl : public httpd_base {
+class HttpdImpl : public HttpdBase {
 public:
-    httpd_impl();
-    virtual ~httpd_impl();
-
+    typedef std::function<void(HttpdBase*, const Request&)> listener_type;
+    
+    HttpdImpl(unsigned int port, const char* ip = NULL);
+    ~HttpdImpl() {}
 
 public:
-    void start(std::function<void(httpd_base*)> receiver);
-
+    void SetListener(listener_type listener);
+    virtual void Start();
+    virtual void Respond(const Response& response);
 
 private:
     TcpSocket socket_;
+    listener_type listener_;
 
 };
 }

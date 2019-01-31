@@ -5,6 +5,9 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <string>
+#include <cstdlib>
+#include <errno.h>
+#include <cstring>
 #include <iostream>
 
 namespace tri {
@@ -62,11 +65,12 @@ void TcpSocket::Listen(std::function<void(TcpSocket*, std::shared_ptr<char>)> re
     ::listen(listenfd_, 1024);
     for(;;) {
         if((connfd = accept(listenfd_, (struct sockaddr*)NULL, NULL)) == -1) {
-            std::cout << "error\n" << std::endl;
+            std::cerr << "error\n" << std::endl;
             continue;
         }
         n = ::recv(connfd, buffer_.get(), buffer_size_, 0);
         buffer_.get()[n] = '\0';
+        connfd_ = connfd;
         receiver(this, buffer_);
         ::close(connfd);
     }
@@ -80,9 +84,11 @@ void TcpSocket::Close() {
 
 bool TcpSocket::Send(const std::string& msg) {
     if(status_ == StatusEnum::Active) {
-       if(::send(listenfd_, msg.c_str(), msg.size(), 0) == -1)
-          return false;
-      return true;
+        if(::send(connfd_, msg.c_str(), msg.size(), 0) == -1) {
+            std::cerr << ::strerror(errno) << std::endl;
+            return false;
+        }
+        return true;
     }
    return false; 
 }

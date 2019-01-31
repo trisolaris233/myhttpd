@@ -35,30 +35,9 @@ private:
     std::shared_ptr<char> buffer_;
     StatusEnum status_;
     TcpSocket(const TcpSocket&) = delete;
+    int connfd_;
 };
 
-/*
-class httpd_base {
-public:
-    httpd_base(unsigned int port, const char* ip = NULL);
-    virtual ~httpd_base();
-
-protected:
-    void start() const;
-
-private:
-    TcpSocket _socket;
-
-};
-
-class httpd : public httpd_base {
-public:
-    httpd(unsigned int port, const char* ip = NULL);
-    virtual ~httpd();
-
-    void start();
-};
-*/
 
 }
 
