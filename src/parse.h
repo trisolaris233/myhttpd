@@ -3,7 +3,7 @@
 
 #include <string>
 #include <vector>
-
+#include "request.h"
 namespace tri {
 
 namespace parse {
@@ -17,7 +17,8 @@ inline namespace tools {
 
 
 
-int ParseRequest(const std::string& src, std::vector<std::pair<std::string, std::string>>& desc);
+std::vector<std::string> ParseRequestToLines(const std::string& src);
+std::pair<bool, std::vector<std::pair<std::string, std::string>>> ParseRequest(std::vector<std::string>&& src);
 }
 
 

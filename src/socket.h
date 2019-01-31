@@ -8,35 +8,32 @@
 
 namespace tri {
 
-class tcpsocket {
+class TcpSocket {
     enum { Ipv4Size = 0xc };
     enum { DefaultBufferSize = 1024 };
-    enum Status {
+    enum StatusEnum {
         Inactive,
         Active
     };
 public:
-    tcpsocket();
+    TcpSocket();
     
-    bool create(unsigned int port, const char* ip = NULL);
-    unsigned int buffersz() const;
-    Status status() const;
-    bool set_buffersz(unsigned int sz);
+    bool Create(unsigned int port, const char* ip = NULL);
+    unsigned int BufferSize() const;
+    StatusEnum Status() const;
+    bool SetBufferSize(unsigned int sz);
 
-    void listen(std::function<void(tcpsocket*, const char*)> receiver);
-    void close();
-    bool send(const std::string& msg);
-    
-protected:
-    bool is_valid();
+    void Listen(std::function<void(TcpSocket*, const char*)> receiver);
+    void Close();
+    bool Send(const std::string& msg);
 
 private:
-    int listenfd;
-    unsigned int buffer_size;
-    struct sockaddr_in sockaddr;
-    char* buffer;
-    Status _status;
-    tcpsocket(const tcpsocket&) = delete;
+    int listenfd_;
+    unsigned int buffer_size_;
+    struct sockaddr_in socket_address_;
+    char* buffer_;
+    StatusEnum status_;
+    TcpSocket(const TcpSocket&) = delete;
 };
 
 /*
@@ -49,7 +46,7 @@ protected:
     void start() const;
 
 private:
-    tcpsocket _socket;
+    TcpSocket _socket;
 
 };
 

@@ -19,7 +19,6 @@ public:
     typedef field_type::iterator iterator;
     typedef field_type::const_iterator const_iterator;
 
-    Request(const char* ptr);
     Request(const std::string& str);
 
     MethodEnum Method() const;

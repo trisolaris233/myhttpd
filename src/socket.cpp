@@ -10,77 +10,77 @@
 namespace tri {
 
 
-tcpsocket::tcpsocket() :
-    listenfd(0),
-    buffer_size(DefaultBufferSize),
-    buffer(NULL),
-    _status(Status::Inactive)
+TcpSocket::TcpSocket() :
+    listenfd_(0),
+    buffer_size_(DefaultBufferSize),
+    buffer_(NULL),
+    status_(StatusEnum::Inactive)
 { 
 }
 
-bool tcpsocket::create(unsigned int port, const char* ip) {
-    if(_status == Status::Active) return false;
-    listenfd = socket(AF_INET, SOCK_STREAM, 0); // create socket
+bool TcpSocket::Create(unsigned int port, const char* ip) {
+    if(status_ == StatusEnum::Active) return false;
+    listenfd_ = socket(AF_INET, SOCK_STREAM, 0); // create socket
 
     // bind up ip and port
-    sockaddr.sin_family = AF_INET;
+    socket_address_.sin_family = AF_INET;
     if(ip == NULL)
-        sockaddr.sin_addr.s_addr = htonl(INADDR_ANY);
+        socket_address_.sin_addr.s_addr = htonl(INADDR_ANY);
     else
-        sockaddr.sin_addr.s_addr = inet_addr(ip);
-    sockaddr.sin_port = htons(port);
+        socket_address_.sin_addr.s_addr = inet_addr(ip);
+    socket_address_.sin_port = htons(port);
 
-    if(bind(listenfd, (struct sockaddr*)&sockaddr, sizeof(sockaddr)) != 0)
+    if(bind(listenfd_, (struct sockaddr*)&socket_address_, sizeof(sockaddr)) != 0)
         return false;
 
     return true;
 }
 
-unsigned int tcpsocket::buffersz() const {
-    return buffer_size;
+unsigned int TcpSocket::BufferSize() const {
+    return buffer_size_;
 }
 
-tcpsocket::Status tcpsocket::status() const {
-    return _status;
+TcpSocket::StatusEnum TcpSocket::Status() const {
+    return status_;
 }
 
-bool tcpsocket::set_buffersz(unsigned int sz) {
-    if(_status == Status::Inactive) {
-        buffer_size = sz;
+bool TcpSocket::SetBufferSize(unsigned int sz) {
+    if(status_ == StatusEnum::Inactive) {
+        buffer_size_ = sz;
         return true;
     }
     return false;
 }
 
 
-void tcpsocket::listen(std::function<void(tcpsocket*, const char*)> receiver) {
+void TcpSocket::Listen(std::function<void(TcpSocket*, const char*)> receiver) {
     int connfd = 0, n = 0;
     // alloc memories for buffer
-    buffer = static_cast<char*>(::malloc(buffer_size));
+    buffer_ = static_cast<char*>(::malloc(buffer_size_));
     // set the socket status
-    _status = Status::Active;
-    ::listen(listenfd, 1024);
+    status_ = StatusEnum::Active;
+    ::listen(listenfd_, 1024);
     for(;;) {
-        if((connfd = accept(listenfd, (struct sockaddr*)NULL, NULL)) == -1) {
+        if((connfd = accept(listenfd_, (struct sockaddr*)NULL, NULL)) == -1) {
             std::cout << "error\n" << std::endl;
             continue;
         }
-        n = recv(connfd, buffer, buffer_size, 0);
-        buffer[n] = '\0';
-        receiver(this, buffer);
+        n = recv(connfd, buffer_, buffer_size_, 0);
+        buffer_[n] = '\0';
+        receiver(this, buffer_);
         ::close(connfd);
     }
 }
 
 
-void tcpsocket::close() {
-    ::close(listenfd);
-    _status = Status::Inactive;
+void TcpSocket::Close() {
+    ::close(listenfd_);
+    status_ = StatusEnum::Inactive;
 }
 
-bool tcpsocket::send(const std::string& msg) {
-    if(_status == Status::Active) {
-       if(::send(listenfd, msg.c_str(), msg.size(), 0) == -1)
+bool TcpSocket::Send(const std::string& msg) {
+    if(status_ == StatusEnum::Active) {
+       if(::send(listenfd_, msg.c_str(), msg.size(), 0) == -1)
           return false;
       return true;
     }
