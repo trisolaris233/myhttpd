@@ -53,10 +53,10 @@ bool TcpSocket::SetBufferSize(unsigned int sz) {
 }
 
 
-void TcpSocket::Listen(std::function<void(TcpSocket*, const char*)> receiver) {
+void TcpSocket::Listen(std::function<void(TcpSocket*, std::shared_ptr<char>)> receiver) {
     int connfd = 0, n = 0;
     // alloc memories for buffer
-    buffer_ = static_cast<char*>(::malloc(buffer_size_));
+    buffer_ = std::shared_ptr<char>(new char[buffer_size_], std::default_delete<char []>());
     // set the socket status
     status_ = StatusEnum::Active;
     ::listen(listenfd_, 1024);
@@ -65,8 +65,8 @@ void TcpSocket::Listen(std::function<void(TcpSocket*, const char*)> receiver) {
             std::cout << "error\n" << std::endl;
             continue;
         }
-        n = recv(connfd, buffer_, buffer_size_, 0);
-        buffer_[n] = '\0';
+        n = ::recv(connfd, buffer_.get(), buffer_size_, 0);
+        buffer_.get()[n] = '\0';
         receiver(this, buffer_);
         ::close(connfd);
     }

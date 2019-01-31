@@ -8,6 +8,7 @@
 #include <unistd.h>
 #include "request.h"
 #include <sstream>
+#include <memory>
 
 void echo(tri::TcpSocket* psocket, const char* msg) {
   ::puts(msg);  
@@ -27,8 +28,8 @@ void httpraseplus(tri::TcpSocket* psocket, const char* msg) {
     std::cout << "size of desc is " << res.second.size() << std::endl;    
 }
 
-void httpraseplus2(tri::TcpSocket* psocket, const char* msg) {
-    tri::http::Request request(msg);
+void httpraseplus2(tri::TcpSocket* psocket, std::shared_ptr<char> msg) {
+    tri::http::Request request(msg.get());
     std::cout << request.Valid() << std::endl;
     std::cout << static_cast<int>(request.Method()) << std::endl;
     std::cout << request.URI() << std::endl;

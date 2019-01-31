@@ -5,6 +5,7 @@
 #include <sys/types.h>
 #include <string>
 #include <functional>
+#include <memory>
 
 namespace tri {
 
@@ -23,7 +24,7 @@ public:
     StatusEnum Status() const;
     bool SetBufferSize(unsigned int sz);
 
-    void Listen(std::function<void(TcpSocket*, const char*)> receiver);
+    void Listen(std::function<void(TcpSocket*, std::shared_ptr<char>)> receiver);
     void Close();
     bool Send(const std::string& msg);
 
@@ -31,7 +32,7 @@ private:
     int listenfd_;
     unsigned int buffer_size_;
     struct sockaddr_in socket_address_;
-    char* buffer_;
+    std::shared_ptr<char> buffer_;
     StatusEnum status_;
     TcpSocket(const TcpSocket&) = delete;
 };

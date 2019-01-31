@@ -1,12 +1,16 @@
-#ifdef RESPONSE_H
-#define RESPONSE_H 
+#ifdef _RESPONSE_H
+#define _RESPONSE_H 
 
 namespace tri {
 
 namespace http {
 
 union StatusCodeEnum {
-    enum Successful {
+    enum InformationEnum {
+        kContinue = 100,
+        kSwitchProtocols = 101
+    };
+    enum SuccessfulEnum {
         kOK = 200,
         kCreated = 201,
         kAccepted = 202,
@@ -15,7 +19,7 @@ union StatusCodeEnum {
         kResetContent = 205,
         kPartialContent = 206
     };
-    enum Redirection {
+    enum RedirectionEnum {
         kMultipleChoices = 300,
         kMovedPermanently = 301,
         kFound = 302,
@@ -24,7 +28,7 @@ union StatusCodeEnum {
         kUseProxy = 305,
         kTemporaryRedirect = 307
     };
-    enum ClientError {
+    enum ClientErrorEnum
         kBadRequest = 400,
         kUnauthorized = 401,
         kPaymentRequired = 402,
@@ -44,7 +48,7 @@ union StatusCodeEnum {
         kReqeustedRangeNotSatisfaiable = 416,
         kExpectionFailed = 417
     };
-    enum ServerError {
+    enum ServerErrorEnum {
         kInternalServerError = 500,
         kNotImplemented = 501,
         kBadGatewey = 502,
@@ -52,10 +56,10 @@ union StatusCodeEnum {
         kGateweyTimeout = 504,
         kHTTPVersionNotSupported = 505
     };
-    Successful success_code;
-    Redirection redirection_code;
-    ClientError client_error_code;
-    ServerError server_error_code;
+    SuccessfulEnum success_code;
+    RedirectionEnum redirection_code;
+    ClientErrorEnum client_error_code;
+    ServerErrorEnum server_error_code;
 };
 
 
@@ -66,8 +70,6 @@ public:
     typedef field_type::const_iterator const_iterator;
 
     Response();
-    Response(const char* str);
-    Response(std::string& str);
     
     std::string Policy() const;
     Method Method() const;
@@ -77,6 +79,8 @@ public:
     iterator end() const;
     const_iteartor cbegin() const;
     const_iterator cend() const;
+    
+    Response& WriteField(std::pair<std::string, std::string>&& field);
 
 private:
     std::string policy_;
