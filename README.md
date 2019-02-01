@@ -1,5 +1,5 @@
 ## Introduction
-![image](http://github.com/trisolaris233/myhttpd/raw/master/src/welcome/myhttpd.png) 
+![image](https://github.com/trisolaris233/myhttpd/raw/master/src/welcome/myhttpd.png) 
 myhttpd is a very simple http server developed by C++.
 
 ## Features
