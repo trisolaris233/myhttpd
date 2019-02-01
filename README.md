@@ -17,3 +17,6 @@ make install
 
 ## Dependencies
 - zlib
+
+## License
+MIT
