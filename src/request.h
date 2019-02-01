@@ -29,6 +29,7 @@ public:
     const_iterator cend() const;
     std::string URI() const;
     bool Valid() const;
+    std::string GetField(const std::string& field_name) const;
 
 private:
     MethodEnum method_;

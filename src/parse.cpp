@@ -1,3 +1,4 @@
+#include "tools.h"
 #include "parse.h"
 #include <cctype>
 #include <utility>
@@ -15,28 +16,6 @@ const std::vector<std::string> MethodSupported = {
     "POST",
     "HEAD"
 };
-
-inline namespace tools {
-
-std::string ToUpper(const std::string& str) {
-    std::string str_target;
-    for(auto chr : str) {
-        str_target += std::toupper(chr);
-    }
-    return str_target;
-}
-
-std::string Trim(const std::string& str, const char* charlist) {
-    std::string str_target;
-    for(auto chr : str) {
-        if(strchr(charlist, chr) == NULL)
-            continue;
-        str_target += chr;
-    }
-    return str_target;
-}
-
-}
 
 // this function do the parse of a http request report
 std::vector<std::string> ParseRequestToLines(const std::string& src) {

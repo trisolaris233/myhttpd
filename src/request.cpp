@@ -23,7 +23,7 @@ namespace http {
             URI_ = fields_[0].second;
             std::string str_method = fields_[0].first;
             std::vector<std::string> vtr_methods = {"OPTIONS", "GET", "POST", "HEAD"};
-            method_ = static_cast<MethodEnum>(std::distance(vtr_methods.begin(), std::find(vtr_methods.begin(), vtr_methods.end(), fields_[0].first)));
+            method_ = static_cast<MethodEnum>(std::distance(vtr_methods.begin(), std::find(vtr_methods.begin(), vtr_methods.end(), fields_[0].first)) + 1);
         }
     }
 
@@ -57,6 +57,15 @@ namespace http {
 
     bool Request::Valid() const {
         return valid_;
+    }
+
+    std::string Request::GetField(const std::string& field_name) const {
+        for(auto field : fields_) {
+            if(field.first == field_name) {
+                return field.second;
+            }
+        }
+        return std::string();
     }
 
 }

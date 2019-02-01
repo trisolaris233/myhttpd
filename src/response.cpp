@@ -73,7 +73,15 @@ void Response::SetMessageBody(const std::string& msg) {
     message_body_ = msg;
 }
 
+void Response::SetMessageBody(std::string&& msg) {
+    message_body_ = msg;
+}
 
+Response GetGeneralResponse() {
+    Response response;
+
+    return response;
+}
 
 }
 

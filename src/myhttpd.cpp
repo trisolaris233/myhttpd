@@ -41,7 +41,7 @@ void httpraseplus2(tri::TcpSocket* psocket, std::shared_ptr<char> msg) {
 }
 
 // request receiver
-void Responder(tri::http::HttpdBase* phttpd, const tri::http::Request& request) {
+void Responder(tri::http::HttpdImpl* phttpd, const tri::http::Request& request) {
     tri::http::Response response;
     response.WriteField("Content-Type", "text/html; charset=utf=8");
     response.SetMessageBody("<html<title>Documention</title><body><h1>23333</h1></body></html>");
@@ -53,8 +53,8 @@ int main(int argc, char** argv) {
     int port;
     ss >> port;
 
-    tri::http::HttpdBase* phttpd = new tri::http::HttpdImpl(port);
-    static_cast<tri::http::HttpdImpl*>(phttpd)->SetListener(Responder);
+    tri::http::HttpdImpl* phttpd = new tri::http::HttpdImpl(port);
+    phttpd->SetListener(tri::http::DefaultListener);
     phttpd->Start();
 
     return 0;

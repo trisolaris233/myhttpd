@@ -115,6 +115,7 @@ namespace http {
         Response& WriteField(std::pair<std::string, std::string>&& field);
         Response& WriteField(const std::string& field_name, const std::string field_value);
         void SetMessageBody(const std::string& msg);
+        void SetMessageBody(std::string&& msg);
 
     private:
         std::string policy_;
@@ -122,6 +123,9 @@ namespace http {
         std::vector<std::pair<std::string, std::string>> headers_;
         std::string message_body_;
     };
+
+
+    Response GetGeneralResponse();
 }
 }
 
