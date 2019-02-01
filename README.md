@@ -1,5 +1,5 @@
 ## Introduction
-<img src="ttps://github.com/trisolaris233/myhttpd/raw/master/src/welcome/myhttpd.png" width="333px" height="100px"/>
+<img src="https://github.com/trisolaris233/myhttpd/raw/master/src/welcome/myhttpd.png" width="333px" height="100px"/>
 
 myhttpd is a very simple http server developed by C++.
 
